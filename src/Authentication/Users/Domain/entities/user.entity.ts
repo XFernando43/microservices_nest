@@ -1,6 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-export class User{
+@Entity({name:'user'})
+export class User {
     @PrimaryGeneratedColumn()
     userId: number;
     @Column()
@@ -9,6 +10,6 @@ export class User{
     lastName:string;
     @Column()
     userPhone:string;
-    @Column()
+    @Column({unique:true})
     userMail:string;
 }
