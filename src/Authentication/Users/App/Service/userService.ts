@@ -2,8 +2,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "../../Domain/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "../../Domain/dto/create-user.dto";
-import { Injectable } from "@nestjs/common";
-import { checkPrimeSync } from "crypto";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpErrorByCode } from "@nestjs/common/utils/http-error-by-code.util";
 
 @Injectable()
 export class UsersServiceImpl{
@@ -13,6 +13,13 @@ export class UsersServiceImpl{
 
     }
     async listUser(){
+
+        // throw new HttpException('Error de Peticion',HttpStatus.BAD_REQUEST);
+
+        // return new Promise((resolve,reject)=>{
+        //     setTimeout(()=> reject("Error de peticion"),2000);
+        // })
+
         return await this.UserRepository.find();
     }
 
