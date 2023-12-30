@@ -16,7 +16,7 @@ export class UsersServiceImpl{
         return await this.UserRepository.find();
     }
 
-    async createUser(_user: any){
+    async createUser(_user: CreateUserDto){
         try {
             console.log(_user);
     
