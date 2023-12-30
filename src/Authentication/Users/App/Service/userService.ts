@@ -6,6 +6,8 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { HttpErrorByCode } from "@nestjs/common/utils/http-error-by-code.util";
 import { Account } from "src/Authentication/Accounts/Domain/entities/account.entity";
 import { CreateAccountDto } from "src/Authentication/Accounts/Domain/dto/create-account.dto";
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UsersServiceImpl{
@@ -26,15 +28,24 @@ export class UsersServiceImpl{
         return await this.UserRepository.find();
     }
 
+
+
+
+    async hashPassword(password:string):Promise<string>{
+        const salt = await bcrypt.genSalt(10);
+        return await bcrypt.hash(password,salt);
+    }
+
+
     async createUser(_user: CreateUserDto){
         try {
+            const hashedPassword = await this.hashPassword(_user.userPassword);
             const newUser = this.UserRepository.create(_user);
             const savedUser = await this.UserRepository.save(newUser);
-    
-
+      
             const newAccount: CreateAccountDto={
                 email:_user.userMail,
-                password:_user.userPassword
+                password:hashedPassword
             };
 
             const account = this.AccountRepository.create(newAccount);
