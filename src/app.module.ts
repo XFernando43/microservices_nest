@@ -14,7 +14,7 @@ import { UsersModule } from './Authentication/Users/infrastructure/users.module'
       password: '123456789',
       database: 'testing',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       logging:true,
     }),
     UsersModule,

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Account } from "src/Authentication/Accounts/Domain/entities/account.entity";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:'user'})
 export class User {
@@ -10,6 +11,8 @@ export class User {
     lastName:string;
     @Column()  
     userPhone:string;
-    @Column({unique:true})
-    userMail:string;
+
+    @OneToOne(()=> Account, (Account)=> Account.user,{cascade:true})
+    account:Account;
+
 }
