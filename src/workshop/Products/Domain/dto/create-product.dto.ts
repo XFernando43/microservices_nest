@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { MaxLength } from "class-validator";
+import { Category } from "src/workshop/Categories/Domain/entities/category.entity";
 
 export class CreateProductDto {
     @ApiProperty()
@@ -12,5 +13,7 @@ export class CreateProductDto {
     productPrice:number;
     @ApiProperty()
     categoryID:number;
+
+    category: Category;
 
 }

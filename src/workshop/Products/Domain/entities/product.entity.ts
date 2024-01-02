@@ -1,7 +1,7 @@
 import { Category } from "src/workshop/Categories/Domain/entities/category.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("Proeducts")
+@Entity("Products")
 export class Product {
     @PrimaryGeneratedColumn()
     productId:number;

@@ -17,7 +17,7 @@ import { ProductsModule } from './workshop/Products/infrasctruture/products.modu
       password: '123456789',
       database: 'testing',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
       logging:true,
     }),
     UsersModule,

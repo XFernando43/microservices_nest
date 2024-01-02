@@ -6,7 +6,7 @@ import { Product } from '../Domain/entities/product.entity';
 import { Category } from 'src/workshop/Categories/Domain/entities/category.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Product])],
+  imports:[TypeOrmModule.forFeature([Product,Category])],
   controllers: [ProductsController],
   providers: [ProductsService],
 })

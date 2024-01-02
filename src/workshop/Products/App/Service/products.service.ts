@@ -4,16 +4,28 @@ import { UpdateProductDto } from '../../Domain/dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../Domain/entities/product.entity';
 import { Repository } from 'typeorm';
+import { Category } from 'src/workshop/Categories/Domain/entities/category.entity';
 
 @Injectable()
 export class ProductsService {
-  constructor(@InjectRepository(Product) private productRepository:Repository<Product>) {
+  constructor(@InjectRepository(Product) private productRepository:Repository<Product>,
+              @InjectRepository(Category) private categoryRepository:Repository<Category>
+  ) {
    
   }
 
   async create(createProductDto:CreateProductDto){
     try{
+      const categoryFromDB = await this.categoryRepository.findOne({
+        where:{
+          categoryId:createProductDto.categoryID
+        }
+      })
+
+      createProductDto.category = categoryFromDB;
+
       const productToDb = await this.productRepository.create(createProductDto);
+      
       return await this.productRepository.save(productToDb);
     }catch(error){
       throw new HttpException("WEB API ERROR" + error, HttpStatus.NOT_FOUND);
@@ -28,7 +40,7 @@ export class ProductsService {
     }
   }
 
-  async findOne(id: number):Promise<Product> {
+  async findOne(id: number):Promise<Product | string> {
     try{
 
       const ProductFromDB = await this.productRepository.findOne({
@@ -39,7 +51,7 @@ export class ProductsService {
       if (ProductFromDB) {
         return ProductFromDB;
     } else {
-        throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
+        return "Producto no encontrado"
     }
     }catch(error){
       throw new HttpException("WEB API ERROR" + error , HttpStatus.BAD_GATEWAY);
