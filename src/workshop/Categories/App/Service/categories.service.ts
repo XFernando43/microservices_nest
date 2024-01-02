@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from '../../Domain/dto/create-category.dto';
 import { UpdateCategoryDto } from '../../Domain/dto/update-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from '../../Domain/entities/category.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+
+  constructor(@InjectRepository(Category) private categoryRepository:Repository<Category>){}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    try{
+      const cateogry = await this.categoryRepository.create(createCategoryDto);
+      return await this.categoryRepository.save(cateogry);
+    }catch(error){
+      console.log(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    return await this.categoryRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    try{
+      const categoryDB = await this.categoryRepository.findOne({
+        where:{
+          categoryId:id,
+        }
+      })
+      if(categoryDB != null){
+        return categoryDB;
+      }else{
+        return "Not Category found it";      
+      }
+    }catch(error){
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    try{
+      const categoryDB = await this.categoryRepository.findOne({
+        where:{
+          categoryId:id,
+        }
+      });
+      if(categoryDB!=null){
+        return await this.categoryRepository.update(id,categoryDB);
+      }
+    }catch(error){
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    return await this.categoryRepository.delete(id);
   }
 }

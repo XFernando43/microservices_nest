@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './Authentication/Users/infrastructure/users.module';
 import { AccountModule } from './Authentication/Accounts/infracstructure/account.module';
+import { CategoriesModule } from './workshop/Categories/Infrasctructure/categories.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { AccountModule } from './Authentication/Accounts/infracstructure/account
       logging:true,
     }),
     UsersModule,
-    AccountModule  
+    AccountModule,
+    CategoriesModule,
   ],
   
   controllers: [AppController],
