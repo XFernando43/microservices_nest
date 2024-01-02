@@ -13,12 +13,12 @@ export class AccountService {
 
   }
 
-  findAll() {
-    return this.AccountRepository.find();
+  async findAll():Promise<Account[]> {
+    return await this.AccountRepository.find();
   }
 
-  findOne(id: number) {
-    return this.AccountRepository.findOne({
+  async findOne(id: number):Promise<Account> {
+    return await this.AccountRepository.findOne({
       where: {
         accountId:id,
       }

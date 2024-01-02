@@ -14,28 +14,24 @@ export class UsersServiceImpl{
     constructor(
         @InjectRepository(Account) private AccountRepository: Repository<Account>,
         @InjectRepository(User) private UserRepository:Repository<User>
-    ){
-
-    }
-    async listUser(){
-
-        // throw new HttpException('Error de Peticion',HttpStatus.BAD_REQUEST);
-
-        // return new Promise((resolve,reject)=>{
-        //     setTimeout(()=> reject("Error de peticion"),2000);
-        // })
-
-        return await this.UserRepository.find();
-    }
-
-
-
+    ){}
 
     async hashPassword(password:string):Promise<string>{
         const salt = await bcrypt.genSalt(10);
         return await bcrypt.hash(password,salt);
     }
 
+    async listUser():Promise<User[]>{
+        return await this.UserRepository.find();
+    }
+
+    async getUserId(id:number):Promise<User>{
+        return await this.UserRepository.findOne({
+            where:{
+                userId:id,
+            }
+        })
+    }
 
     async createUser(_user: CreateUserDto){
         try {
