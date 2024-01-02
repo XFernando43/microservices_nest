@@ -1,5 +1,5 @@
 import { User } from "src/Authentication/Users/Domain/entities/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:"Account"})
 export class Account {
@@ -10,6 +10,6 @@ export class Account {
     @Column({unique:true})
     password:string;
 
-    @OneToOne(()=> User,(user)=> user.account)
+    @OneToOne(()=> User)
     user:User;
 }

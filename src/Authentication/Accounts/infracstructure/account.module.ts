@@ -6,7 +6,7 @@ import { Account } from '../Domain/entities/account.entity';
 import { User } from 'src/Authentication/Users/Domain/entities/user.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Account, User])],
+  imports:[TypeOrmModule.forFeature([Account])],
   controllers: [AccountController],
   providers: [AccountService],
 })
