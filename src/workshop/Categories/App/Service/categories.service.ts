@@ -15,7 +15,7 @@ export class CategoriesService {
       const cateogry = await this.categoryRepository.create(createCategoryDto);
       return await this.categoryRepository.save(cateogry);
     }catch(error){
-      console.log(error);
+      throw new HttpException("WEB API ERROR" + error, HttpStatus.NOT_FOUND);
     }
   }
 

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './Authentication/Users/infrastructure/users.module';
 import { AccountModule } from './Authentication/Accounts/infracstructure/account.module';
 import { CategoriesModule } from './workshop/Categories/Infrasctructure/categories.module';
+import { ProductsModule } from './workshop/Products/infrasctruture/products.module';
 
 @Module({
   imports: [
@@ -16,11 +17,12 @@ import { CategoriesModule } from './workshop/Categories/Infrasctructure/categori
       password: '123456789',
       database: 'testing',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
       logging:true,
     }),
     UsersModule,
     AccountModule,
+    ProductsModule,
     CategoriesModule,
   ],
   
