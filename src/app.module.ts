@@ -6,9 +6,14 @@ import { UsersModule } from './Authentication/Users/infrastructure/users.module'
 import { AccountModule } from './Authentication/Accounts/infracstructure/account.module';
 import { CategoriesModule } from './workshop/Categories/Infrasctructure/categories.module';
 import { ProductsModule } from './workshop/Products/infrasctruture/products.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath:['.env.development'],
+      isGlobal:true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -19,7 +24,7 @@ import { ProductsModule } from './workshop/Products/infrasctruture/products.modu
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
       logging:true,
-    }),
+    }),    
     UsersModule,
     AccountModule,
     ProductsModule,
