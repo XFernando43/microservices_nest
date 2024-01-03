@@ -9,17 +9,17 @@ export class UserController{
     constructor(private userService:UsersServiceImpl){}
     @Get()
     getUser(){
-        return this.userService.listUser();
+        return this.userService.findAll();
     }
  
     @Post("postUser")
     @ApiOperation({summary:"Crea un usuario y una cuenta relacionada"})
-    createUser(@Body() userRequest:CreateUserDto ){
-        return this.userService.createUser(userRequest);
+    async createUser(@Body() userRequest:CreateUserDto ){
+        return await this.userService.createUser(userRequest);
     }
 
     @Get(":id")
-    getUserById(@Param('id') id:number){
-        return this.userService.getUserId(id);
+    async getUserById(@Param('id') id:number){
+        return await this.userService.finOne(id);
     }
 }

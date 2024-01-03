@@ -21,16 +21,34 @@ export class UsersServiceImpl{
         return await bcrypt.hash(password,salt);
     }
 
-    async listUser():Promise<User[]>{
-        return await this.UserRepository.find();
+    async findAll():Promise<User[] | string>{
+        try{
+            const users = await this.UserRepository.find();
+            if(users && users.length > 0){
+                return users;
+            }else{
+                throw new HttpException("not Users found", HttpStatus.AMBIGUOUS);
+            }
+        }catch(error){
+            throw new HttpException(error, HttpStatus.AMBIGUOUS);
+        }
     }
 
-    async getUserId(id:number):Promise<User>{
-        return await this.UserRepository.findOne({
-            where:{
-                userId:id,
+    async finOne(id:number):Promise<User>{
+        try{
+            const user = await this.UserRepository.findOne({
+                where:{
+                    userId:id,
+                }
+            })
+            if(user){
+                return user;
+            }else{
+                throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
             }
-        })
+        }catch(error){
+            throw new HttpException("not Users found", HttpStatus.AMBIGUOUS);
+        }
     }
 
     async createUser(_user: CreateUserDto){
