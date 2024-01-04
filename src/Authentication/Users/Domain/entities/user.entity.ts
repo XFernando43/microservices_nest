@@ -13,7 +13,7 @@ export class User {
     userPhone:string;
 
     @OneToOne(()=> Account, (account)=> account.user)
-    @JoinColumn()
+    @JoinColumn({name:"accountID"})
     account:Account;
 
 }

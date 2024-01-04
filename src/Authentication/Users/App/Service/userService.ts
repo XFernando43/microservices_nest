@@ -10,36 +10,50 @@ import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
-export class UsersServiceImpl{
+export class UsersService{
     constructor(
         @InjectRepository(Account) private AccountRepository: Repository<Account>,
         @InjectRepository(User) private UserRepository:Repository<User>
     ){}
+    
+    async checkPassword(password:string, passwordDb:string):Promise<boolean>{
+        return await bcrypt.compare(password,passwordDb);
+    }
+
+    async findByUsername(username:string, password:string){
+        return await this.UserRepository.findOne({
+            where:{
+                userName:username
+            },
+            relations: ['account']
+        })
+    }
 
     async hashPassword(password:string):Promise<string>{
         const salt = await bcrypt.genSalt(10);
         return await bcrypt.hash(password,salt);
     }
 
-    async findAll():Promise<User[] | string>{
+    async findAll():Promise<User[] | any>{
         try{
-            const users = await this.UserRepository.find();
+            const users = await this.UserRepository.find({relations: ['account']});
             if(users && users.length > 0){
-                return users;
+                return users
             }else{
-                throw new HttpException("not Users found", HttpStatus.AMBIGUOUS);
+                throw new HttpException("No hay usuarios disponibles", HttpStatus.AMBIGUOUS);
             }
         }catch(error){
-            throw new HttpException(error, HttpStatus.AMBIGUOUS);
+
         }
-    }
+    }   
 
     async finOne(id:number):Promise<User>{
         try{
             const user = await this.UserRepository.findOne({
                 where:{
                     userId:id,
-                }
+                },
+                relations: ['account']
             })
             if(user){
                 return user;
@@ -55,15 +69,18 @@ export class UsersServiceImpl{
         try {
             const hashedPassword = await this.hashPassword(_user.userPassword);
             const newUser = this.UserRepository.create(_user);
-            const savedUser = await this.UserRepository.save(newUser);
-      
+            
             const newAccount: CreateAccountDto={
                 email:_user.userMail,
                 password:hashedPassword
             };
-
+            
             const account = this.AccountRepository.create(newAccount);
             this.AccountRepository.save(account);
+            
+            newUser.account = account;
+
+            const savedUser = await this.UserRepository.save(newUser);
 
             return savedUser; 
         } catch (error) {

@@ -23,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       database: 'testing',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
-      logging:true,
+      logging:true, 
     }),    
     UsersModule,
     AccountModule,
